@@ -39,6 +39,9 @@ class DBreader():
         db = MongoClient().poloniex
         self.__collection = db[collection_name]
         
+    def ReadFromUnix():
+        ### ID = unixtimestamp
+        
     def readCompleteDatabase(self):
         """ Reads the database into lists"""
         print("Reading",self.__collection.count(),"files")
