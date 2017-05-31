@@ -3,9 +3,16 @@
 import numpy as np
 from pymongo import MongoClient
 import pymongo
-
 class DBreader():
+    """ Class to read mongo database
+    Use:
+        1. Init the class
+        2. Set the collection name with SetCollectionName
+        3. read the database into files
+        4. Return data with the proper member function
+    """
     def __init__(self):
+        
         self.__features = []
         self.__times = []
         self.__ids = []
@@ -42,7 +49,12 @@ class DBreader():
             self.__times.append(time)
             self.__ids.append(iid)
         
-    def WindowData(self, window_size, wait_time):
+    def WindowData(self, window_size, wait_time, overlap=50):
+        """ Window data into window_size, with target at
+        window_size + wait_time with window overlap of overlap
+        # Returns
+            X_train, y_train
+        """
         data = []
         feature_vec = []
         prev_id = self.__collection.find_one({})["_id"]
@@ -67,7 +79,6 @@ class DBreader():
         feature_world = []
         target_world = []
         
-        from math import floor
         for data in cut_data:
             try:
                 added = 0
@@ -82,7 +93,7 @@ class DBreader():
                         feature_vec.append(features)
                         targets.append(value)
                         features = np.zeros((window_size, 2))
-                        i -= (window_size-50) #sliding window
+                        i -= (window_size-overlap) #sliding window
                         
                     features[added,:] = seq
                     added += 1
@@ -101,6 +112,35 @@ class DBreader():
                 
         X_train = feature_world[0]
         y_train = target_world[0]
+        for i in range(1, len(feature_world)-1):
+            X_train = np.concatenate((X_train, feature_world[i]), axis=0)
+            y_train = np.concatenate((y_train, target_world[i]), axis=0)
+        
+        return X_train, y_train
+        
+    def LongestData(self):
+        """ Returns the longest continous data in the database"""
+        data = []
+        feature_vec = []
+        prev_id = self.__collection.find_one({})["_id"]
+        for i in range(0, len(self.__ids)):
+            if (self.__ids[i] != prev_id):
+                prev_id = self.__ids[i]
+                data.append(feature_vec)
+                feature_vec = []
+                feature_vec.append(self.__features[i])
+            else:
+                prev_id = self.__ids[i]
+                feature_vec.append(self.__features[i])
+        max_length = 0
+        for seq in data:
+            if len(seq)>max_length:
+                return_data = seq
+        features = np.zeros((len(return_data), 2))
+        for i in range(len(return_data)):
+            features[i,:] = return_data[i]
+            
+        return features
                     
         
         
