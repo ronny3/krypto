@@ -38,6 +38,16 @@ class LinearRegressionModels():
                     del kwargs[key]
                     
         return model(**kwargs)
+    
+    def KernelRidge(self, random_=False, **kwargs):
+        from sklearn.kernel_ridge import KernelRidge as model
+        if random_:
+            argspec = inspect.getfullargspec(model)
+            for key in list(kwargs):
+                if key not in argspec.args:
+                    del kwargs[key]
+                    
+        return model(**kwargs)
         
     def Lasso(self, random_=False, **kwargs):
         from sklearn.linear_model import Lasso as model
@@ -198,6 +208,151 @@ class LinearRegressionModels():
         choice = random.choice(self.__models)
         return getattr(self, choice)(random_=True,**kwargs)
     
+        
+class SVMs():
+    """http://scikit-learn.org/stable/modules/lda_qda.html
+    """
+    
+    def __init__(self):
+        self.__models = ['SVM_SVR', 'SVM_NuSVR', 'SVM_LinearSVR']
+    
+    def ModelNames(self):
+        return self.__models
+        
+    def RandomModel(self, random_=False, **kwargs):
+        import random
+        choice = random.choice(self.__models)
+        return getattr(self, choice)(random_=True,**kwargs)
+        
+        
+    def SVM_SVR(self, random_=False, **kwargs):
+        from sklearn.svm import SVR as model
+        if random_:
+            argspec = inspect.getfullargspec(model)
+            for key in list(kwargs):
+                if key not in argspec.args:
+                    del kwargs[key]
+                    
+        return model(**kwargs)
+        
+    def SVM_NuSVR(self, random_=False, **kwargs):
+        from sklearn.svm import NuSVR as model
+        if random_:
+            argspec = inspect.getfullargspec(model)
+            for key in list(kwargs):
+                if key not in argspec.args:
+                    del kwargs[key]
+                    
+        return model(**kwargs)
+        
+    def SVM_LinearSVR(self, random_=False, **kwargs):
+        from sklearn.svm import LinearSVR as model
+        if random_:
+            argspec = inspect.getfullargspec(model)
+            for key in list(kwargs):
+                if key not in argspec.args:
+                    del kwargs[key]
+                    
+        return model(**kwargs)
+        
+    
+class NearestNeighbors():
+    def __init__(self):
+        self.__models = ['KNeighborsRegressor']
+    
+    def ModelNames(self):
+        return self.__models
+        
+    def RandomModel(self, random_=False, **kwargs):
+        import random
+        choice = random.choice(self.__models)
+        return getattr(self, choice)(random_=True,**kwargs)
+        
+    def KNeighborsRegressor(self, random_=False, **kwargs):
+        from sklearn.neighbors import KNeighborsRegressor as model
+        if random_:
+            argspec = inspect.getfullargspec(model)
+            for key in list(kwargs):
+                if key not in argspec.args:
+                    del kwargs[key]
+                    
+        return model(**kwargs)
+        
+class GaussianProcesses():
+    def __init__(self):
+        1
+    
+    def ModelNames(self):
+        return self.__models
+        
+    def RandomModel(self, random_=False, **kwargs):
+        import random
+        choice = random.choice(self.__models)
+        return getattr(self, choice)(random_=True,**kwargs)
+        
+    TODO::
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
 class RegressionEnsembles():
     """ http://scikit-learn.org/stable/modules/ensemble.html
